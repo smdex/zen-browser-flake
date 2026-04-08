@@ -27,12 +27,11 @@
     };
   };
 
-  testScript =
-    wrapWithX11
-    ''
-      machine.succeed("test -f /home/testuser/.config/zen/profiles.ini")
-      machine.succeed("grep -q 'Name=default' /home/testuser/.config/zen/profiles.ini")
-      machine.succeed("test -d /home/testuser/.config/zen/default")
+  testScript = wrapWithX11 ''
+    # python
+    machine.succeed("test -f /home/testuser/.config/zen/profiles.ini")
+    machine.succeed("grep -q 'Name=default' /home/testuser/.config/zen/profiles.ini")
+    machine.succeed("test -d /home/testuser/.config/zen/default")
 
       machine.succeed("test -f /home/testuser/.config/zen/default/zen-sessions.jsonlz4 || ( echo '{\"spaces\":[],\"tabs\":[],\"folders\":[],\"groups\":[]}' > /tmp/min.json && mozlz4a /tmp/min.json /home/testuser/.config/zen/default/zen-sessions.jsonlz4 && chown testuser:users /home/testuser/.config/zen/default/zen-sessions.jsonlz4 )")
 

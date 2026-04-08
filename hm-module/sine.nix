@@ -110,13 +110,12 @@ in {
         profileName: profile: let
           modsFilePath = "${profilePath}/${profileName}/chrome/sine-mods/mods.json";
 
-          updateSineModsScript =
-            pkgs.writeShellScript "zen-sine-mods-update-${profileName}"
-            ''
-              MODS_FILE="${modsFilePath}"
-              SINE_MODS="${lib.concatStringsSep " " profile.sine.mods}"
-              BASE_DIR="${profilePath}/${profileName}"
-              MANAGED_FILE="$BASE_DIR/zen-sine-mods-nix-managed.json"
+          updateSineModsScript = pkgs.writeShellScript "zen-sine-mods-update-${profileName}" ''
+            # bash
+            MODS_FILE="${modsFilePath}"
+            SINE_MODS="${lib.concatStringsSep " " profile.sine.mods}"
+            BASE_DIR="${profilePath}/${profileName}"
+            MANAGED_FILE="$BASE_DIR/zen-sine-mods-nix-managed.json"
 
               mkdir -p "$BASE_DIR/chrome/sine-mods"
 
@@ -255,15 +254,15 @@ in {
               fi
             '';
         in
-          nameValuePair "zen-sine-mods-${profileName}" (lib.hm.dag.entryAfter ["writeBoundary"]
-            ''
-              ${updateSineModsScript}
-              if [[ "$?" -eq 0 ]]; then
-                $VERBOSE_ECHO "zen-sine-mods: Updated sine mods for profile '${profileName}'"
-              else
-                echo "zen-sine-mods: Failed to update sine mods for profile '${profileName}'!" >&2
-              fi
-            '')
+          nameValuePair "zen-sine-mods-${profileName}" (lib.hm.dag.entryAfter ["writeBoundary"] ''
+            # bash
+            ${updateSineModsScript}
+            if [[ "$?" -eq 0 ]]; then
+              $VERBOSE_ECHO "zen-sine-mods: Updated sine mods for profile '${profileName}'"
+            else
+              echo "zen-sine-mods: Failed to update sine mods for profile '${profileName}'!" >&2
+            fi
+          '')
       )
       profilesWithSineMods;
   };

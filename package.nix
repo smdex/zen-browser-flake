@@ -63,6 +63,7 @@
     else binaryName;
 
   installDarwin = ''
+    # bash
     runHook preInstall
 
     mkdir -p "$out/Applications" "$out/bin"
@@ -99,6 +100,7 @@
   '';
 
   installLinux = ''
+    # bash
     runHook preInstall
 
     # Linux tarball installation

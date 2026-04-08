@@ -697,13 +697,12 @@ in {
             .groups = (.groups | sort_by(.index // 0))
           '';
 
-          updateScript =
-            pkgs.writeShellScript "zen-sessions-update-${profileName}"
-            ''
-              SESSIONS_FILE="${sessionsFile}"
-              SESSIONS_TMP="$(mktemp)"
-              SESSIONS_MODIFIED="$(mktemp)"
-              BACKUP_FILE="''${SESSIONS_FILE}.backup"
+          updateScript = pkgs.writeShellScript "zen-sessions-update-${profileName}" ''
+            # bash
+            SESSIONS_FILE="${sessionsFile}"
+            SESSIONS_TMP="$(mktemp)"
+            SESSIONS_MODIFIED="$(mktemp)"
+            BACKUP_FILE="''${SESSIONS_FILE}.backup"
 
               cleanup() {
                 rm -f "$SESSIONS_TMP" "$SESSIONS_MODIFIED"
@@ -769,18 +768,18 @@ in {
               rm -f "$BACKUP_FILE"
             '';
         in
-          nameValuePair "zen-sessions-${profileName}" (lib.hm.dag.entryAfter ["writeBoundary"]
-            ''
-              ${updateScript}
-              if [[ "$?" -eq 0 ]]; then
-                $VERBOSE_ECHO "zen-sessions: Updated spaces/pins for profile '${profileName}'"
-              else
-                YELLOW="\033[1;33m"
-                NC="\033[0m"
-                echo -e "zen-sessions:''${YELLOW} Failed to update zen-sessions.jsonlz4 for Zen browser \"${profileName}\" profile.''${NC}"
-                echo -e "zen-sessions:''${YELLOW} If Zen Browser was open, close it and rebuild to apply changes.''${NC}"
-              fi
-            '')
+          nameValuePair "zen-sessions-${profileName}" (lib.hm.dag.entryAfter ["writeBoundary"] ''
+            # bash
+            ${updateScript}
+            if [[ "$?" -eq 0 ]]; then
+              $VERBOSE_ECHO "zen-sessions: Updated spaces/pins for profile '${profileName}'"
+            else
+              YELLOW="\033[1;33m"
+              NC="\033[0m"
+              echo -e "zen-sessions:''${YELLOW} Failed to update zen-sessions.jsonlz4 for Zen browser \"${profileName}\" profile.''${NC}"
+              echo -e "zen-sessions:''${YELLOW} If Zen Browser was open, close it and rebuild to apply changes.''${NC}"
+            fi
+          '')
       )
       profilesWithPlaces;
   };

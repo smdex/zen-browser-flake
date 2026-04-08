@@ -60,13 +60,12 @@ in {
         profileName: profile: let
           themesFilePath = "${profilePath}/${profileName}/zen-themes.json";
 
-          updateModsScript =
-            pkgs.writeShellScript "zen-mods-update-${profileName}"
-            ''
-                        THEMES_FILE="${themesFilePath}"
-                        MODS="${lib.concatStringsSep " " profile.mods}"
-                        BASE_DIR="${profilePath}/${profileName}"
-                        MANAGED_FILE="$BASE_DIR/zen-mods-nix-managed.json"
+          updateModsScript = pkgs.writeShellScript "zen-mods-update-${profileName}" ''
+            # bash
+                      THEMES_FILE="${themesFilePath}"
+                      MODS="${lib.concatStringsSep " " profile.mods}"
+                      BASE_DIR="${profilePath}/${profileName}"
+                      MANAGED_FILE="$BASE_DIR/zen-mods-nix-managed.json"
 
                         if [ ! -f "$THEMES_FILE" ]; then
                           echo '{}' > "$THEMES_FILE"

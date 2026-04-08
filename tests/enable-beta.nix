@@ -6,6 +6,7 @@
   };
 
   testScript = ''
+    # python
     machine.succeed("su - testuser -c 'zen-beta --version'")
   '';
 }

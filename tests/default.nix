@@ -11,6 +11,7 @@
       zen-browser-flake = self;
 
       wrapWithX11 = testScript: ''
+        # python
         machine.succeed("( nohup Xvfb :99 -screen 0 1024x768x24 </dev/null >>/tmp/xvfb.log 2>&1 & )")
         machine.succeed("sleep 2")
         machine.succeed("su - testuser -c 'DISPLAY=:99 timeout 5 zen-beta about:blank' || true")
@@ -54,6 +55,7 @@
       };
 
       testScript = ''
+        # python
         machine.wait_for_unit("multi-user.target")
         machine.wait_for_unit("home-manager-testuser.service")
         ${suite.testScript}
